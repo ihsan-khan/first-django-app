@@ -1,6 +1,6 @@
 from unittest import loader
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 
 from polls.models import Question
 
@@ -11,10 +11,14 @@ def index(request):
     return render(request, "polls/index.html", context)
 
 def detail(request, question_id):
-    return HttpResponse(f"You're looking at question {question_id}.")
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+    return render(request, "polls/detail.html", {"question": question})
 
 def results(request, question_id):
-    return HttpResponse(f"You're looking at the results of question {question_id}.")
+    return render(request, "polls/results.html", {"question_id": question_id})
 
 def vote(request, question_id):
     return HttpResponse(f"You're voting on question {question_id}.")
