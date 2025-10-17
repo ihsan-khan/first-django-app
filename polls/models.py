@@ -20,7 +20,6 @@ class Question(models.Model):
         now = timezone.now()
         return now - timedelta(days=1) <= self.pub_date <= now
     
-    
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
